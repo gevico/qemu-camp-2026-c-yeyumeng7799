@@ -13,8 +13,14 @@ typedef struct {
 Student students[MAX_STUDENTS];
 int n;
 int linear_search(const char *target_name) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+   // 遍历所有学生
+    for (int i = 0; i < n; i++) {
+        // 比较姓名（字符串比较必须用 strcmp，不能用 ==）
+        if (strcmp(students[i].name, target_name) == 0) {
+            return i;  // 找到，返回当前下标
+        }
+    }
+    return -1;  // 遍历完没找到，返回 -1
 }
 
 int main(void) {

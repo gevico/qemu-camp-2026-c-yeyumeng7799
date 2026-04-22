@@ -15,8 +15,30 @@ Student students[MAX_STUDENTS];
 int n;
 
 int binary_search(const char *target_name) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+     int left = 0;           // 左边界
+    int right = n - 1;      // 右边界
+
+    while (left <= right) {
+        // 计算中间位置
+        int mid = (left + right) / 2;
+
+        // 比较目标姓名和中间学生姓名
+        int cmp = strcmp(students[mid].name, target_name);
+
+        if (cmp == 0) {
+            // 找到目标，返回下标
+            return mid;
+        } else if (cmp > 0) {
+            // 中间姓名 > 目标姓名 → 去左半边查找
+            right = mid - 1;
+        } else {
+            // 中间姓名 < 目标姓名 → 去右半边查找
+            left = mid + 1;
+        }
+    }
+
+    // 循环结束未找到
+    return -1;
 }
 
 int main(void) {
