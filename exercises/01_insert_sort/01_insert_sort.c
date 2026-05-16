@@ -17,12 +17,8 @@ void insertion_sort(Student students[], int n) {
             students[j + 1] = students[j];
         }
         students[j + 1] = key;
-
-
-        
-    }// TODO: 在这里添加你的代码
-    
-    
+    }
+}
 
 int main(void) {
     FILE *file;

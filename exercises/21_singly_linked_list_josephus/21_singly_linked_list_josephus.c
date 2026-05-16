@@ -43,7 +43,6 @@ void create_list(int n) {
 // k: 起始位置（从 1 开始计数）
 // m: 报数阈值（数到 m 的人出列）
 void josephus_problem(int n, int k, int m) {
-    // 参数校验
     if (n <= 0 || k <= 0 || m <= 0) {
         printf("参数错误：n, k, m 都必须大于 0\n");
         return;
@@ -51,7 +50,6 @@ void josephus_problem(int n, int k, int m) {
 
     create_list(n);
 
-    // 从头开始，移动到第 k 个位置作为起点（支持 k > n 的情况，按环形回绕）
     link current = get_head_node();
     if (!current) {
         printf("\n");
@@ -61,21 +59,30 @@ void josephus_problem(int n, int k, int m) {
         current = next_wrap(current);
     }
 
-    // 依次出列并打印顺序
     for (int out = 0; out < n; ++out) {
         if (m == 1) {
-            // m==1 时当前节点直接出列
-            // TODO: 在这里添加你的代码
-            // I AM NOT DONE
+            printf("%d ", current->item);
+            link to_delete = current;
+            current = next_wrap(current);
+            delete(to_delete);
+            continue;
         }
 
-        // 数到 m 的那个人出列：从 current 开始走 m-1 步，落在第 m 个节点
-        // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        for (int step = 1; step < m - 1; ++step) {
+            current = next_wrap(current);
+        }
 
-        // 此时 current 指向要出列的人
-        // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        link to_delete = next_wrap(current);
+        printf("%d ", to_delete->item);
+        
+        link p = get_head_node();
+        while (p->next != to_delete) {
+            p = p->next;
+        }
+        p->next = to_delete->next;
+        
+        current = next_wrap(to_delete->next);
+        free_node(to_delete);
     }
 
     printf("\n");

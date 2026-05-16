@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <execinfo.h>
 
-#ifdef TODO
+#ifdef DEBUG
 
-#define DEBUG_PRINT(fmt, ...) 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+#define DEBUG_PRINT(fmt, ...) \
+    fprintf(stderr, "[DEBUG] %s:%d: " fmt "\n", __FILE__, __LINE__, __VA_ARGS__)
 
 #else
 

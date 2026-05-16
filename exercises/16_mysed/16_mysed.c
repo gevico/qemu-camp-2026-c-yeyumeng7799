@@ -9,15 +9,40 @@ int parse_replace_command(const char* cmd, char** old_str, char** new_str) {
         return -1;
     }
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    const char *p = cmd + 2;
+    const char *start = p;
+    while (*p && *p != '/') p++;
+    
+    int old_len = p - start;
+    *old_str = (char*)malloc(old_len + 1);
+    strncpy(*old_str, start, old_len);
+    (*old_str)[old_len] = '\0';
+
+    if (*p != '/') return -1;
+    p++;
+    start = p;
+    while (*p && *p != '/') p++;
+    
+    int new_len = p - start;
+    *new_str = (char*)malloc(new_len + 1);
+    strncpy(*new_str, start, new_len);
+    (*new_str)[new_len] = '\0';
 
     return 0;
 }
 
 void replace_first_occurrence(char* str, const char* old, const char* new) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    char *pos = strstr(str, old);
+    if (!pos) return;
+    
+    int old_len = strlen(old);
+    int new_len = strlen(new);
+    int str_len = strlen(str);
+    
+    if (new_len != old_len) {
+        memmove(pos + new_len, pos + old_len, str_len - (pos - str) - old_len + 1);
+    }
+    memcpy(pos, new, new_len);
 }
 
 int main(int argc, char* argv[]) {

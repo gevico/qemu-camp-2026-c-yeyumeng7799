@@ -7,8 +7,12 @@
 #include <string.h>
 
 void trim(char *str) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    char *start = str;
+    while (*start && isspace(*start)) start++;
+    char *end = str + strlen(str) - 1;
+    while (end > start && isspace(*end)) end--;
+    *(end + 1) = '\0';
+    if (start != str) memmove(str, start, strlen(start) + 1);
 }
 
 int load_dictionary(const char *filename, HashTable *table,
@@ -20,12 +24,25 @@ int load_dictionary(const char *filename, HashTable *table,
   }
 
   char line[1024];
-  char current_word[100] = {0};
-  char current_translation[1024] = {0};
-  int in_entry = 0;
+  *dict_count = 0;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+  while (fgets(line, sizeof(line), file)) {
+      char *sep = strchr(line, '\t');
+      if (!sep) sep = strchr(line, ' ');
+      if (!sep) continue;
+      
+      *sep = '\0';
+      char *word = line;
+      char *trans = sep + 1;
+      
+      trim(word);
+      trim(trans);
+      
+      if (strlen(word) > 0 && strlen(trans) > 0) {
+          hash_table_insert(table, word, trans);
+          (*dict_count)++;
+      }
+  }
 
   fclose(file);
   return 0;

@@ -13,39 +13,47 @@ typedef struct {
 } Bloom;
 
 static Bloom *bloom_create(size_t m) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    Bloom *bf = malloc(sizeof(Bloom));
+    bf->m = m;
+    bf->bits = calloc((m + 7) / 8, sizeof(unsigned char));
+    return bf;
 }
 
 static void bloom_free(Bloom *bf) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    free(bf->bits);
+    free(bf);
 }
 
-/* 位操作 */
 static void set_bit(unsigned char *bm, size_t idx) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
-}
-static int test_bit(const unsigned char *bm, size_t idx) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    bm[idx / 8] |= (1 << (idx % 8));
 }
 
-/* 三个简单哈希：sum(c*k) % m */
+static int test_bit(const unsigned char *bm, size_t idx) {
+    return (bm[idx / 8] >> (idx % 8)) & 1;
+}
+
 static size_t hash_k(const char *s, size_t m, int k) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    size_t hash = 0;
+    while (*s) {
+        hash = hash * 31 + *s + k * 7;
+        s++;
+    }
+    return hash % m;
 }
 
 static void bloom_add(Bloom *bf, const char *s) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    for (int k = 1; k <= 3; k++) {
+        size_t idx = hash_k(s, bf->m, k);
+        set_bit(bf->bits, idx);
+    }
 }
 
 static int bloom_maybe_contains(Bloom *bf, const char *s) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    for (int k = 1; k <= 3; k++) {
+        size_t idx = hash_k(s, bf->m, k);
+        if (!test_bit(bf->bits, idx)) return 0;
+    }
+    return 1;
 }
 
 int main(void) {

@@ -57,11 +57,41 @@ int shell_parse(char *buf, char *argv[])
 {
     int argc = 0;
     int state = 0;
-    // TODO: 在这里添加你的代码，完成命令行解析
-    // 功能：将输入字符串buf按空格分割成多个参数，存入argv数组
-    // 返回：参数个数argc
-    // 提示：使用状态机的方式处理，注意处理字符串结束符
-    // I AM NOT DONE
+    char *p = buf;
+    char *start = NULL;
+
+    while (*p) {
+        if (state == 0) {
+            if (*p != ' ' && *p != '\t') {
+                if (*p == '"') {
+                    state = 2;
+                    start = p + 1;
+                } else {
+                    state = 1;
+                    start = p;
+                }
+            }
+        } else if (state == 1) {
+            if (*p == ' ' || *p == '\t') {
+                *p = '\0';
+                argv[argc++] = start;
+                state = 0;
+            }
+        } else if (state == 2) {
+            if (*p == '"') {
+                *p = '\0';
+                argv[argc++] = start;
+                state = 0;
+            }
+        }
+        p++;
+    }
+
+    if (state == 1 || state == 2) {
+        argv[argc++] = start;
+    }
+
+    argv[argc] = NULL;
     return argc;
 }
 
